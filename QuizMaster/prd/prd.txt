@@ -1,0 +1,80 @@
+Product Requirements Document: 
+Terminal QuizMaster 
+Project Name: Terminal QuizMaster Type: Console Application (CLI) Tech Stack: Python Data 
+Store: Local CSV files 
+1. Objectives 
+Functional 
+Create a working application where admins can add questions to a database (CSV) and 
+students can take quizzes and save results. 
+Pedagogical 
+● Polymorphism: Handle different question types (Multiple Choice vs. True/False) 
+uniformly. 
+● Encapsulation: Protect user passwords and score data. 
+● Inheritance: Create user roles and question hierarchies. 
+● File I/O: Manually reading/writing objects to text format (Serialization/Deserialization). 
+2. Core Features (User Stories) 
+Authentication System 
+● Register: Users can sign up as an Admin or Student. Data is saved to users.csv. 
+● Login: System reads users.csv to validate credentials and instantiate the correct User 
+object. 
+Admin Role 
+● Add Question: Admin can create a new question. They must specify the type (e.g., 
+"MCQ" or "Boolean"). 
+● View Results: Admin can view a leaderboard of all student scores (reads results.csv). 
+Student Role 
+● Take Quiz: The system loads questions from questions.csv, iterates through them, and 
+captures input. 
+● View History: Student can see their own past performance. 
+3. OOP Architecture 
+A. The User Hierarchy (Inheritance) 
+● User (Abstract Base Class) 
+○ Attributes: username, __password (private) 
+○ Methods: login(), logout() 
+● Admin (Child of User) 
+○ Methods: add_question(), view_all_results() 
+● Student (Child of User) 
+○ Methods: take_quiz(), view_my_results() 
+B. The Question Hierarchy (Polymorphism) 
+● Question (Abstract Base Class) 
+○ Attributes: text, difficulty, category 
+○ Abstract Methods: display(), check_answer(input) 
+● MCQQuestion (Child of Question) 
+○ Attributes: options (List), correct_option_index 
+○ Polymorphism: display() shows the question + labeled options (A, B, C, D). 
+● TrueFalseQuestion (Child of Question) 
+○ Attributes: correct_bool 
+○ Polymorphism: display() shows the question + "[T/F]". 
+C. Data Management (Static Methods & File I/O) 
+● FileManager Class 
+○ A utility class with static methods to handle the raw CSV operations. This separates 
+logic from data access. 
+○ Methods: read_csv(filename), append_to_csv(filename, data) 
+4. Data Model (CSV Schema) 
+1. users.csv 
+id,username,password,role 
+1,mr_teacher,securepass,admin 
+2,john_doe,student123,student 
+ 
+2. questions.csv 
+Note: The options column can be a pipe-separated string (e.g., "Red|Blue|Green") to teach 
+string splitting. 
+id,type,text,options,answer,difficulty 
+101,mcq,What is the capital of France?,Paris|London|Berlin,Paris,1 
+102,tf,Python is compiled.,,False,1 
+ 
+3. results.csv 
+student_id,score,total_questions,date 
+2,8,10,2023-10-27 
+5. Implementation Logic Flow 
+1. Startup: App initializes FileManager. Checks if CSVs exist; if not, creates them with 
+headers. 
+2. Auth Loop: User enters credentials. 
+○ Code Challenge: Read users.csv. If match found, create an instance of Admin or 
+Student based on the "role" column. 
+3. Menu Loop: Based on the instance type (isinstance(current_user, Admin)), show different 
+menus. 
+4. Quiz Loop (Polymorphism): 
+○ Load rows from questions.csv. 
+○ Convert rows into a list of objects: [MCQQuestion(...), TrueFalseQuestion(...)]. 
+○ Loop through list calling q.display() and q.check_answer(). 
+5. Save: Append score to results.csv. 
