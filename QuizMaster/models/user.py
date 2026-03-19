@@ -26,4 +26,3 @@ class User(ABC):
     def change_password(self):
         pass
 
-
