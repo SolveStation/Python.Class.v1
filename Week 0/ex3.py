@@ -33,3 +33,6 @@ print(3 != 4) #True
 
 print("Floor division")
 print(10 // 3) #3
+
+print("Modulus")
+print(10 % 3) #1
