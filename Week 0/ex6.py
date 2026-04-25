@@ -1,0 +1,5 @@
+print("Hello \nWorld")
+print("Hello \tWorld")
+print("My name is \"Marcellos\"")
+print("My name is \'Marcellos\'")
+print("Hello \fWorld")
